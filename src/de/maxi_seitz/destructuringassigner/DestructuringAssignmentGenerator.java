@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 
 
@@ -32,8 +30,10 @@ public class DestructuringAssignmentGenerator {
 		AstRoot abstractSyntaxTree = parser.parse(sourceCode, inputFile, 0);
 		
 		abstractSyntaxTree.visit(astNode -> {
-			if(isNodeAssignment(astNode)) {
-				System.out.println("\n_ " + Token.typeToName(astNode.getType()) + " _ " + astNode.depth() + " _____________________\n");
+			Statement statement = new Statement(astNode);
+			
+			if(statement.isAssignment()) {
+				System.out.println("_ " + Token.typeToName(astNode.getType()) + " _ " + astNode.depth() + " _____________________");
 				System.out.println(astNode.toSource());
 			}
 			
@@ -43,21 +43,4 @@ public class DestructuringAssignmentGenerator {
 		Files.writeString(Paths.get(outputFile), abstractSyntaxTree.toSource());
 	}
 	
-	private static boolean isNodeAssignment(AstNode node) {
-		if(node != null) {
-			int tokenType = node.getType();
-			Node parent = node.getParent();
-			
-			boolean isAssignment = tokenType == Token.ASSIGN || tokenType == Token.VAR;
-			boolean isTopLevelAssignment = true;
-			
-			if(parent != null) {
-				isTopLevelAssignment = parent.getType() != Token.VAR;
-			}
-			
-			return isAssignment && isTopLevelAssignment;
-		} else {
-			return false;
-		}
-	}
 }
