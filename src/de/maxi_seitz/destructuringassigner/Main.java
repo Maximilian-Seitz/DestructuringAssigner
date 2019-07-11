@@ -12,9 +12,9 @@ public class Main {
 		
 		try {
 			DestructuringAssignmentGenerator generator = new DestructuringAssignmentGenerator();
-			generator.setSourceCodeFromFile(args[0]);
+			generator.setInputFile(args[0]);
+			generator.setOutputFile(args[1]);
 			generator.run();
-			generator.writeResultCodeToFile(args[1]);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
