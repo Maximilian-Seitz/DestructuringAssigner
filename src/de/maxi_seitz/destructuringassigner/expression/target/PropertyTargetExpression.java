@@ -12,7 +12,7 @@ class PropertyTargetExpression extends TargetExpression {
 	
 	@Override
 	public boolean isConvertibleExpression() {
-		return !node.getTarget().hasSideEffects();
+		return isSideEffectFree(node);
 	}
 	
 	@Override

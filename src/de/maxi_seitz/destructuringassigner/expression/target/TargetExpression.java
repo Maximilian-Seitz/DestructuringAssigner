@@ -1,9 +1,10 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
+import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.*;
 
-public abstract class TargetExpression {
+public abstract class TargetExpression extends ExpressionWrapper {
 	
 	public static TargetExpression fromAstNode(AstNode node) {
 		if(node != null) {

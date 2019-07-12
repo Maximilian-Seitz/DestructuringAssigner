@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
+import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
 import de.maxi_seitz.destructuringassigner.expression.source.SourceExpression;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Wrapper for {@link AstNode},
  * to allow easier analysis.
  */
-public abstract class AssignmentExpression {
+public abstract class AssignmentExpression extends ExpressionWrapper {
 	
 	private TargetExpression target;
 	private SourceExpression source;
@@ -64,12 +65,11 @@ public abstract class AssignmentExpression {
 				   getContainingAstNode().getFirstChild() != null;
 	}
 	
-	public boolean isFirstInGroup() {
+	public boolean isFirstInList() {
 		List<AssignmentExpression> proceedingAssignments = getProceedingAssignments();
 		
 		for(AssignmentExpression proceedingAssignment : proceedingAssignments) {
 			if(proceedingAssignment.isConvertibleExpression()) {
-				//TODO check if assignments are compatible
 				return false;
 			}
 		}

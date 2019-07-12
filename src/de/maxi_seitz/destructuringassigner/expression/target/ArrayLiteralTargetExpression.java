@@ -12,7 +12,7 @@ class ArrayLiteralTargetExpression extends TargetExpression {
 	
 	@Override
 	public boolean isConvertibleExpression() {
-		return true;
+		return isSideEffectFree(node);
 	}
 	
 	@Override

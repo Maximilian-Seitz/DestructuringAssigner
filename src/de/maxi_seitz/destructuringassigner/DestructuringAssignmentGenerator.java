@@ -4,7 +4,6 @@ import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpre
 
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
-import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 
 import java.io.IOException;
@@ -45,11 +44,11 @@ public class DestructuringAssignmentGenerator {
 			
 			for(AssignmentExpression assignment : assignments) {
 				if(assignment.isConvertibleExpression()) {
-					if(!assignment.isFirstInGroup()) {
+					if(!assignment.isFirstInList()) {
 						System.out.print("\t");
 					}
 					
-					System.out.println(assignment.getSourceString() + " >> " + assignment.getTargetString());
+					System.out.println(assignment.getTargetString() + " = " + assignment.getSourceString());
 				}
 			}
 			
