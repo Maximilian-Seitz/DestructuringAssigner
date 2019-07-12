@@ -1,14 +1,13 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
-import org.mozilla.javascript.ast.AstNode;
-
 import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.AstNode;
 
 class NonConvertibleTargetExpression extends TargetExpression {
 	
 	NonConvertibleTargetExpression(AstNode node) {
 		if(node != null) {
-			System.out.println(Token.typeToName(node.getType()) + " node (" + node.getClass().getName() + ") is no convertible target expression.");
+			//System.out.println(Token.typeToName(node.getType()) + " node (" + node.getClass().getName() + ") is no convertible target expression.");
 		}
 	}
 	

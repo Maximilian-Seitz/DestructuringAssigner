@@ -3,11 +3,10 @@ package de.maxi_seitz.destructuringassigner.expression.assignment;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
 import de.maxi_seitz.destructuringassigner.expression.source.SourceExpression;
 
+import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.VariableInitializer;
-
-import org.mozilla.javascript.Token;
 
 /**
  * Wrapper for {@link AstNode},
@@ -34,17 +33,19 @@ public abstract class AssignmentExpression {
 		return null;
 	}
 	
-
+	
 	public boolean isConvertibleExpression() {
-		return source.isConvertibleExpression() && target.isConvertibleExpression();
+		return source.isConvertibleExpression() &&
+				   target.isConvertibleExpression() &&
+				   source.isTargetValidForDestructoring(target);
 	}
 	
-	public String getTargetName() {
-		return target.getName();
+	public String getTargetString() {
+		return target.toString();
 	}
 	
-	public String getSourceName() {
-		return source.getName();
+	public String getSourceString() {
+		return source.toString();
 	}
 	
 	

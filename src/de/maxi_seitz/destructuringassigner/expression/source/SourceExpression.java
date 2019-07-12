@@ -1,9 +1,10 @@
 package de.maxi_seitz.destructuringassigner.expression.source;
 
+import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
+import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ElementGet;
-
-import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.PropertyGet;
 
 public abstract class SourceExpression {
 	
@@ -11,9 +12,13 @@ public abstract class SourceExpression {
 		if(node != null) {
 			int tokenType = node.getType();
 			
-			if(tokenType == Token.GETELEM) {
+			if(tokenType == Token.GETELEM || tokenType == Token.GETPROP) {
 				if(node instanceof ElementGet) {
-					return new ArrayElementSourceExpression((ElementGet) node);
+					return new ElementSourceExpression((ElementGet) node);
+				}
+				
+				if(node instanceof PropertyGet) {
+					return new PropertySourceExpression((PropertyGet) node);
 				}
 			}
 		}
@@ -22,6 +27,6 @@ public abstract class SourceExpression {
 	}
 	
 	public abstract boolean isConvertibleExpression();
-	public abstract String getName();
+	public abstract boolean isTargetValidForDestructoring(TargetExpression target);
 	
 }

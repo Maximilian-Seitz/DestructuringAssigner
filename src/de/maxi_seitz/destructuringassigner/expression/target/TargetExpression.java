@@ -1,11 +1,7 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
-import org.mozilla.javascript.ast.ArrayLiteral;
-import org.mozilla.javascript.ast.AstNode;
-import org.mozilla.javascript.ast.ElementGet;
-import org.mozilla.javascript.ast.Name;
-
 import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.*;
 
 public abstract class TargetExpression {
 	
@@ -13,7 +9,7 @@ public abstract class TargetExpression {
 		if(node != null) {
 			int tokenType = node.getType();
 			
-			if (tokenType == Token.NAME || tokenType == Token.ARRAYLIT || tokenType == Token.GETELEM) {
+			if (tokenType == Token.NAME || tokenType == Token.ARRAYLIT || tokenType == Token.GETELEM || tokenType == Token.GETPROP) {
 				if (node instanceof Name) {
 					return new VariableTargetExpression((Name) node);
 				}
@@ -23,7 +19,11 @@ public abstract class TargetExpression {
 				}
 				
 				if (node instanceof ElementGet) {
-					return new ArrayElementTargetExpression((ElementGet) node);
+					return new ElementTargetExpression((ElementGet) node);
+				}
+				
+				if (node instanceof PropertyGet) {
+					return new PropertyTargetExpression((PropertyGet) node);
 				}
 			}
 		}

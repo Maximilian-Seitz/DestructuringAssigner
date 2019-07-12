@@ -20,4 +20,9 @@ class VariableTargetExpression extends TargetExpression {
 		return node.getString();
 	}
 	
+	@Override
+	public String toString() {
+		return node.getString();
+	}
+	
 }

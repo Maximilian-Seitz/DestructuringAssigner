@@ -42,8 +42,7 @@ public class DestructuringAssignmentGenerator {
 			AssignmentExpression assignment = AssignmentExpression.fromAstNode(astNode);
 			
 			if(assignment != null && assignment.isConvertibleExpression()) {
-				System.out.println(assignment.getSourceName() + " >> " + assignment.getTargetName());
-				//System.out.println(astNode.toSource());
+				System.out.println(assignment.getSourceString() + " >> " + assignment.getTargetString());
 			}
 			
 			return true;

@@ -1,18 +1,18 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
-import org.mozilla.javascript.ast.ArrayLiteral;
+import org.mozilla.javascript.ast.PropertyGet;
 
-class ArrayLiteralTargetExpression extends TargetExpression {
+class PropertyTargetExpression extends TargetExpression {
 	
-	private final ArrayLiteral node;
+	private final PropertyGet node;
 	
-	ArrayLiteralTargetExpression(ArrayLiteral node) {
+	PropertyTargetExpression(PropertyGet node) {
 		this.node = node;
 	}
 	
 	@Override
 	public boolean isConvertibleExpression() {
-		return true;
+		return !node.getTarget().hasSideEffects();
 	}
 	
 	@Override
@@ -24,5 +24,4 @@ class ArrayLiteralTargetExpression extends TargetExpression {
 	public String toString() {
 		return node.toSource();
 	}
-	
 }
