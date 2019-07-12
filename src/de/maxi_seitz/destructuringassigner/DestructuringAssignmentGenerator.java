@@ -4,11 +4,13 @@ import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpre
 
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
+import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 public class DestructuringAssignmentGenerator {
@@ -39,10 +41,16 @@ public class DestructuringAssignmentGenerator {
 		}
 		
 		abstractSyntaxTree.visit(astNode -> {
-			AssignmentExpression assignment = AssignmentExpression.fromAstNode(astNode);
+			List<AssignmentExpression> assignments = AssignmentExpression.fromAstNode(astNode);
 			
-			if(assignment != null && assignment.isConvertibleExpression()) {
-				System.out.println(assignment.getSourceString() + " >> " + assignment.getTargetString());
+			for(AssignmentExpression assignment : assignments) {
+				if(assignment.isConvertibleExpression()) {
+					if(!assignment.isFirstInGroup()) {
+						System.out.print("\t");
+					}
+					
+					System.out.println(assignment.getSourceString() + " >> " + assignment.getTargetString());
+				}
 			}
 			
 			return true;

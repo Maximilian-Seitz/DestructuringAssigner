@@ -3,10 +3,10 @@ package de.maxi_seitz.destructuringassigner.expression.assignment;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
 import de.maxi_seitz.destructuringassigner.expression.source.SourceExpression;
 
-import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.Assignment;
-import org.mozilla.javascript.ast.AstNode;
-import org.mozilla.javascript.ast.VariableInitializer;
+import org.mozilla.javascript.ast.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Wrapper for {@link AstNode},
@@ -17,27 +17,64 @@ public abstract class AssignmentExpression {
 	private TargetExpression target;
 	private SourceExpression source;
 	
-	public static AssignmentExpression fromAstNode(AstNode node) {
-		int tokenType = node.getType();
+	public static List<AssignmentExpression> fromAstNode(AstNode node) {
+		List<AssignmentExpression> assignments = new LinkedList<>();
 		
-		if(tokenType == Token.ASSIGN || tokenType == Token.VAR) {
-			if(node instanceof VariableInitializer) {
-				return new InitializerExpression((VariableInitializer) node);
+		if(node != null) {
+			if(node instanceof VariableDeclaration) {
+				List<VariableInitializer> initializers = ((VariableDeclaration) node).getVariables();
+				
+				for(VariableInitializer initializer : initializers) {
+					assignments.add(new InitializerExpression(initializer));
+				}
 			}
 			
-			if(node instanceof Assignment) {
-				return new SetterExpression((Assignment) node);
+			if(node instanceof ExpressionStatement) {
+				AstNode expression = ((ExpressionStatement) node).getExpression();
+				
+				if(expression instanceof Assignment) {
+					assignments.add(new SetterExpression((Assignment) expression));
+				} else {
+					System.out.println("Test: " + expression.shortName());
+				}
+			}
+		}
+		
+		return assignments;
+	}
+	
+	public List<AssignmentExpression> getProceedingAssignments() {
+		AstNode container = getContainingAstNode();
+		
+		if(container != null) {
+			if(container.getFirstChild() != null) {
+				AstNode previousNode = (AstNode) container.getChildBefore(getGroupAstNode());
+				return AssignmentExpression.fromAstNode(previousNode);
 			}
 		}
 		
 		return null;
 	}
 	
-	
 	public boolean isConvertibleExpression() {
 		return source.isConvertibleExpression() &&
 				   target.isConvertibleExpression() &&
-				   source.isTargetValidForDestructoring(target);
+				   source.isTargetValidForDestructoring(target) &&
+				   getContainingAstNode() != null &&
+				   getContainingAstNode().getFirstChild() != null;
+	}
+	
+	public boolean isFirstInGroup() {
+		List<AssignmentExpression> proceedingAssignments = getProceedingAssignments();
+		
+		for(AssignmentExpression proceedingAssignment : proceedingAssignments) {
+			if(proceedingAssignment.isConvertibleExpression()) {
+				//TODO check if assignments are compatible
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public String getTargetString() {
@@ -57,4 +94,8 @@ public abstract class AssignmentExpression {
 		source = SourceExpression.fromAstNode(node);
 	}
 	
+	
+	protected abstract AstNode getContainingAstNode();
+	
+	protected abstract AstNode getGroupAstNode();
 }
