@@ -9,7 +9,7 @@ import org.mozilla.javascript.ast.AstRoot;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 
 
 public class DestructuringAssignmentGenerator {
@@ -39,21 +39,25 @@ public class DestructuringAssignmentGenerator {
 			return;
 		}
 		
+		List<AssignmentExpression> firstListElements = new LinkedList<>();
+		
 		abstractSyntaxTree.visit(astNode -> {
 			List<AssignmentExpression> assignments = AssignmentExpression.fromAstNode(astNode);
 			
 			for(AssignmentExpression assignment : assignments) {
 				if(assignment.isConvertibleExpression()) {
-					if(!assignment.isFirstInList()) {
-						System.out.print("\t");
+					if(assignment.isFirstInList()) {
+						firstListElements.add(assignment);
 					}
-					
-					System.out.println(assignment.getTargetString() + " = " + assignment.getSourceString());
 				}
 			}
 			
 			return true;
 		});
+		
+		for(AssignmentExpression expression : firstListElements) {
+			System.out.println(expression);
+		}
 		
 		Files.writeString(Paths.get(outputFile), abstractSyntaxTree.toSource());
 	}

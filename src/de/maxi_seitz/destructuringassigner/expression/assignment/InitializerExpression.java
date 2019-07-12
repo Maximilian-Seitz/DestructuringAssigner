@@ -1,7 +1,10 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
 import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
+
+import java.util.List;
 
 /**
  * Wrapper for {@link VariableInitializer},
@@ -15,6 +18,19 @@ class InitializerExpression extends AssignmentExpression {
 		this.node = node;
 		setTargetExpression(node.getTarget());
 		setSourceExpression(node.getInitializer());
+	}
+	
+	@Override
+	public void remove() {
+		VariableDeclaration declaration = (VariableDeclaration) getGroupAstNode();
+		
+		List<VariableInitializer> initializers = declaration.getVariables();
+		
+		if(initializers.size() > 1) {
+			initializers.remove(node);
+		} else {
+			getContainingAstNode().removeChild(declaration);
+		}
 	}
 	
 	@Override

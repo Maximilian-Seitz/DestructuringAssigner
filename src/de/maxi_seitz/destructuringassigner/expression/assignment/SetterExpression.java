@@ -1,7 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
-import org.mozilla.javascript.ast.Assignment;
-import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.*;
 
 /**
  * Wrapper for {@link Assignment},
@@ -15,6 +14,11 @@ class SetterExpression extends AssignmentExpression {
 		this.node = node;
 		setTargetExpression(node.getLeft());
 		setSourceExpression(node.getRight());
+	}
+	
+	@Override
+	public void remove() {
+		getContainingAstNode().removeChild(getGroupAstNode());
 	}
 	
 	@Override

@@ -77,12 +77,19 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return true;
 	}
 	
+	public abstract void remove();
+	
 	public String getTargetString() {
 		return target.toString();
 	}
 	
 	public String getSourceString() {
 		return source.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return getTargetString() + " = " + getSourceString();
 	}
 	
 	
