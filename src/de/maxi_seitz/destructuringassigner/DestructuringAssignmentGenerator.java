@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import de.maxi_seitz.destructuringassigner.expression.AssignmentExpression;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -27,7 +28,14 @@ public class DestructuringAssignmentGenerator {
 		String sourceCode = Files.readString(Paths.get(inputFile));
 		
 		Parser parser = new Parser();
-		AstRoot abstractSyntaxTree = parser.parse(sourceCode, inputFile, 0);
+		AstRoot abstractSyntaxTree;
+		
+		try {
+			abstractSyntaxTree = parser.parse(sourceCode, inputFile, 0);
+		} catch(EvaluatorException e) {
+			System.err.println("Failed to parse file. Following error found: " + e.getLocalizedMessage());
+			return;
+		}
 		
 		abstractSyntaxTree.visit(astNode -> {
 			AssignmentExpression statement = AssignmentExpression.fromAstNode(astNode);
