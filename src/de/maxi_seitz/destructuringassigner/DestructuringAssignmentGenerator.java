@@ -1,13 +1,14 @@
 package de.maxi_seitz.destructuringassigner;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
 
-import de.maxi_seitz.destructuringassigner.expression.AssignmentExpression;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class DestructuringAssignmentGenerator {
@@ -38,10 +39,10 @@ public class DestructuringAssignmentGenerator {
 		}
 		
 		abstractSyntaxTree.visit(astNode -> {
-			AssignmentExpression statement = AssignmentExpression.fromAstNode(astNode);
+			AssignmentExpression assignment = AssignmentExpression.fromAstNode(astNode);
 			
-			if(statement != null && statement.isSettingVariable()) {
-				System.out.println(statement.getVariableName());
+			if(assignment != null && assignment.isConvertibleExpression()) {
+				System.out.println(assignment.getSourceName() + " >> " + assignment.getTargetName());
 				//System.out.println(astNode.toSource());
 			}
 			
