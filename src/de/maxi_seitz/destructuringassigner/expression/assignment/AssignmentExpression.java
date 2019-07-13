@@ -58,6 +58,11 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return null;
 	}
 	
+	public List<AssignmentExpression> getFollowingAssignments() {
+		AstNode nextNode = (AstNode) getGroupAstNode().getNext();
+		return AssignmentExpression.fromAstNode(nextNode);
+	}
+	
 	public boolean isConvertibleExpression() {
 		return source.isConvertibleExpression() &&
 				   target.isConvertibleExpression() &&
@@ -78,13 +83,30 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return true;
 	}
 	
-	public AssignmentGroup getAssignmentGroup() {
+	public void groupFollowingAssignments() {
 		AssignmentGroup group = source.getAssignmentGroup();
 		
-		isCompatibleWithGroup(group);
+		//The assignment creating a group is always compatible with it
 		addToGroup(group);
 		
-		return group;
+		boolean isCurrentElementInGroup = true;
+		AssignmentExpression currentAssignment = this;
+		while(isCurrentElementInGroup) {
+			List<AssignmentExpression> nextAssignments = currentAssignment.getFollowingAssignments();
+			
+			for(AssignmentExpression nextAssignment : nextAssignments) {
+				isCurrentElementInGroup = nextAssignment.isCompatibleWithGroup(group);
+				
+				if(isCurrentElementInGroup) {
+					nextAssignment.addToGroup(group);
+					currentAssignment = nextAssignment;
+				} else {
+					break;
+				}
+			}
+		}
+		
+		System.out.println(group);
 	}
 	
 	public boolean isCompatibleWithGroup(AssignmentGroup group) {

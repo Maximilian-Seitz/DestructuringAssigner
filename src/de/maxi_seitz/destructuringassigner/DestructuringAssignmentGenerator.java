@@ -2,6 +2,7 @@ package de.maxi_seitz.destructuringassigner;
 
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
 
+import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -55,8 +56,10 @@ public class DestructuringAssignmentGenerator {
 			return true;
 		});
 		
-		for(AssignmentExpression expression : firstListElements) {
-			System.out.println(expression + ": " + expression.getAssignmentGroup().getType().name());
+		for(AssignmentExpression assignment : firstListElements) {
+			System.out.println(assignment);
+			
+			assignment.groupFollowingAssignments();
 		}
 		
 		Files.writeString(Paths.get(outputFile), abstractSyntaxTree.toSource());

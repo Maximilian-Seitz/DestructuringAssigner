@@ -46,7 +46,7 @@ class ElementSourceExpression extends SourceExpression {
 			String arrayIdentifier = arrayAssignmentGroup.getArrayIdentifier();
 			
 			if(getArrayIdentifier().equals(arrayIdentifier)) {
-				return arrayAssignmentGroup.isElementIdPresent(getArrayElementNumber());
+				return !arrayAssignmentGroup.isElementIdPresent(getArrayElementNumber());
 			}
 		}
 		

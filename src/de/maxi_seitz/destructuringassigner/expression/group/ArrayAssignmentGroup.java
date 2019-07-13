@@ -29,4 +29,19 @@ public class ArrayAssignmentGroup extends AssignmentGroup {
 	public void addAssignment(AssignmentExpression assignment, int elementNumber) {
 		elementAssignments.put(elementNumber, assignment);
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		for(Map.Entry<Integer, AssignmentExpression> elementAssignment : elementAssignments.entrySet()) {
+			sb.append("\t");
+			sb.append(elementAssignment.getKey());
+			sb.append(": ");
+			sb.append(elementAssignment.getValue());
+			sb.append('\n');
+		}
+		
+		return sb.toString();
+	}
 }
