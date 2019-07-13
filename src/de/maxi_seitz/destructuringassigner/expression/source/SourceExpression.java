@@ -1,6 +1,8 @@
 package de.maxi_seitz.destructuringassigner.expression.source;
 
 import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
+import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
+import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
@@ -28,6 +30,12 @@ public abstract class SourceExpression extends ExpressionWrapper {
 	}
 	
 	public abstract boolean isConvertibleExpression();
+	
 	public abstract boolean isTargetValidForDestructoring(TargetExpression target);
 	
+	public abstract AssignmentGroup getAssignmentGroup();
+	
+	public abstract boolean isCompatibleWithGroup(AssignmentGroup group);
+	
+	public abstract void addAssignmentToGroup(AssignmentGroup group, AssignmentExpression assignment);
 }

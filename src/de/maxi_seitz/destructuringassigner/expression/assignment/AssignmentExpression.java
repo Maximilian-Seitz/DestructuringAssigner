@@ -1,6 +1,7 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
 import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
+import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
 import de.maxi_seitz.destructuringassigner.expression.source.SourceExpression;
 
@@ -77,20 +78,40 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return true;
 	}
 	
-	public abstract void remove();
-	
-	public String getTargetString() {
-		return target.toString();
+	public AssignmentGroup getAssignmentGroup() {
+		AssignmentGroup group = source.getAssignmentGroup();
+		
+		isCompatibleWithGroup(group);
+		addToGroup(group);
+		
+		return group;
 	}
 	
-	public String getSourceString() {
-		return source.toString();
+	public boolean isCompatibleWithGroup(AssignmentGroup group) {
+		return source.isCompatibleWithGroup(group);
+	}
+	
+	public void addToGroup(AssignmentGroup group) {
+		source.addAssignmentToGroup(group, this);
 	}
 	
 	@Override
 	public String toString() {
 		return getTargetString() + " = " + getSourceString();
 	}
+	
+	public abstract void remove();
+	
+	
+	
+	private String getTargetString() {
+		return target.toString();
+	}
+	
+	private String getSourceString() {
+		return source.toString();
+	}
+	
 	
 	
 	protected void setTargetExpression(AstNode node) {

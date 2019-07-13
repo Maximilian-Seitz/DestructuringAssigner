@@ -56,7 +56,7 @@ public class DestructuringAssignmentGenerator {
 		});
 		
 		for(AssignmentExpression expression : firstListElements) {
-			System.out.println(expression);
+			System.out.println(expression + ": " + expression.getAssignmentGroup().getType().name());
 		}
 		
 		Files.writeString(Paths.get(outputFile), abstractSyntaxTree.toSource());

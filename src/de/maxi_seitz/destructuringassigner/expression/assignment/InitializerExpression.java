@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
+import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
