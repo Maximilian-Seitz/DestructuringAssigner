@@ -1,6 +1,5 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
-import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
@@ -19,6 +18,20 @@ class InitializerExpression extends AssignmentExpression {
 		this.node = node;
 		setTargetExpression(node.getTarget());
 		setSourceExpression(node.getInitializer());
+	}
+	
+	@Override
+	public void setSourceNode(AstNode sourceNode) {
+		node.setInitializer(sourceNode);
+		
+		setSourceExpression(sourceNode);
+	}
+	
+	@Override
+	public void setTargetNode(AstNode targetNode) {
+		node.setTarget(targetNode);
+		
+		setTargetExpression(targetNode);
 	}
 	
 	@Override

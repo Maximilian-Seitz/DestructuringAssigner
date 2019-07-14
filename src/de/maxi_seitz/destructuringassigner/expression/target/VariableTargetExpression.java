@@ -7,6 +7,8 @@ class VariableTargetExpression extends TargetExpression {
 	private final Name node;
 	
 	VariableTargetExpression(Name node) {
+		super(node);
+		
 		this.node = node;
 	}
 	

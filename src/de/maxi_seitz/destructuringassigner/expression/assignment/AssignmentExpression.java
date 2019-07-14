@@ -45,23 +45,14 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return assignments;
 	}
 	
-	public List<AssignmentExpression> getProceedingAssignments() {
-		AstNode container = getContainingAstNode();
-		
-		if(container != null) {
-			if(container.getFirstChild() != null) {
-				AstNode previousNode = (AstNode) container.getChildBefore(getGroupAstNode());
-				return AssignmentExpression.fromAstNode(previousNode);
-			}
-		}
-		
-		return null;
+	
+	public AstNode getTargetNode() {
+		return target.getNode();
 	}
 	
-	public List<AssignmentExpression> getFollowingAssignments() {
-		AstNode nextNode = (AstNode) getGroupAstNode().getNext();
-		return AssignmentExpression.fromAstNode(nextNode);
-	}
+	public abstract void setSourceNode(AstNode sourceNode);
+	
+	public abstract void setTargetNode(AstNode targetNode);
 	
 	public boolean isConvertibleExpression() {
 		return source.isConvertibleExpression() &&
@@ -83,6 +74,8 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return true;
 	}
 	
+	public abstract void remove();
+	
 	public void groupFollowingAssignments() {
 		AssignmentGroup group = source.getAssignmentGroup();
 		
@@ -101,37 +94,22 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 					nextAssignment.addToGroup(group);
 					currentAssignment = nextAssignment;
 				} else {
+					if(nextAssignment.isConvertibleExpression()) {
+						nextAssignment.groupFollowingAssignments();
+					}
+					
 					break;
 				}
 			}
 		}
 		
-		System.out.println(group);
+		group.compressToDestructuringAssignment();
 	}
 	
-	public boolean isCompatibleWithGroup(AssignmentGroup group) {
-		return source.isCompatibleWithGroup(group);
-	}
-	
-	public void addToGroup(AssignmentGroup group) {
-		source.addAssignmentToGroup(group, this);
-	}
 	
 	@Override
 	public String toString() {
 		return getTargetString() + " = " + getSourceString();
-	}
-	
-	public abstract void remove();
-	
-	
-	
-	private String getTargetString() {
-		return target.toString();
-	}
-	
-	private String getSourceString() {
-		return source.toString();
 	}
 	
 	
@@ -148,4 +126,42 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	protected abstract AstNode getContainingAstNode();
 	
 	protected abstract AstNode getGroupAstNode();
+	
+	
+	
+	private List<AssignmentExpression> getProceedingAssignments() {
+		AstNode container = getContainingAstNode();
+		
+		if(container != null) {
+			if(container.getFirstChild() != null) {
+				AstNode previousNode = (AstNode) container.getChildBefore(getGroupAstNode());
+				return AssignmentExpression.fromAstNode(previousNode);
+			}
+		}
+		
+		return null;
+	}
+	
+	private List<AssignmentExpression> getFollowingAssignments() {
+		AstNode nextNode = (AstNode) getGroupAstNode().getNext();
+		return AssignmentExpression.fromAstNode(nextNode);
+	}
+	
+	
+	private boolean isCompatibleWithGroup(AssignmentGroup group) {
+		return source.isCompatibleWithGroup(group);
+	}
+	
+	private void addToGroup(AssignmentGroup group) {
+		source.addAssignmentToGroup(group, this);
+	}
+	
+	
+	private String getTargetString() {
+		return target.toString();
+	}
+	
+	private String getSourceString() {
+		return source.toString();
+	}
 }

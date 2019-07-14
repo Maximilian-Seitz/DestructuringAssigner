@@ -43,7 +43,7 @@ class ElementSourceExpression extends SourceExpression {
 	public boolean isCompatibleWithGroup(AssignmentGroup group) {
 		if(group.getType() == AssignmentGroup.Type.ARRAY) {
 			ArrayAssignmentGroup arrayAssignmentGroup = (ArrayAssignmentGroup) group;
-			String arrayIdentifier = arrayAssignmentGroup.getArrayIdentifier();
+			String arrayIdentifier = arrayAssignmentGroup.getIdentifier();
 			
 			if(getArrayIdentifier().equals(arrayIdentifier)) {
 				return !arrayAssignmentGroup.isElementIdPresent(getArrayElementNumber());

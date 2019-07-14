@@ -57,8 +57,6 @@ public class DestructuringAssignmentGenerator {
 		});
 		
 		for(AssignmentExpression assignment : firstListElements) {
-			System.out.println(assignment);
-			
 			assignment.groupFollowingAssignments();
 		}
 		

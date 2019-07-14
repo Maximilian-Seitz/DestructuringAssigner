@@ -33,7 +33,7 @@ class PropertySourceExpression extends SourceExpression {
 	
 	@Override
 	public AssignmentGroup getAssignmentGroup() {
-		return new ObjectAssignmentGroup();
+		return new ObjectAssignmentGroup(getObjectIdentifier());
 	}
 	
 	@Override
@@ -50,6 +50,10 @@ class PropertySourceExpression extends SourceExpression {
 	@Override
 	public String toString() {
 		return node.toSource();
+	}
+	
+	private String getObjectIdentifier() {
+		return node.getTarget().toSource();
 	}
 	
 }

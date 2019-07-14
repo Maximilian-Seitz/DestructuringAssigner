@@ -6,6 +6,8 @@ import org.mozilla.javascript.ast.AstNode;
 class NonConvertibleTargetExpression extends TargetExpression {
 	
 	NonConvertibleTargetExpression(AstNode node) {
+		super(node);
+		
 		if(node != null) {
 			//System.out.println(Token.typeToName(node.getType()) + " node (" + node.getClass().getName() + ") is no convertible target expression.");
 		}

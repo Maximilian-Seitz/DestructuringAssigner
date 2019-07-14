@@ -1,11 +1,18 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
 import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
-import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.*;
 
 public abstract class TargetExpression extends ExpressionWrapper {
+	
+	private final AstNode node;
+	
+	
+	protected TargetExpression(AstNode node) {
+		this.node = node;
+	}
+	
 	
 	public static TargetExpression fromAstNode(AstNode node) {
 		if(node != null) {
@@ -34,6 +41,11 @@ public abstract class TargetExpression extends ExpressionWrapper {
 	}
 	
 	public abstract boolean isConvertibleExpression();
+	
 	public abstract String getName();
+	
+	public AstNode getNode() {
+		return node;
+	}
 	
 }

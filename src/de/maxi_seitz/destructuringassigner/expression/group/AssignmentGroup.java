@@ -12,6 +12,8 @@ public abstract class AssignmentGroup {
 		return type;
 	}
 	
+	public abstract void compressToDestructuringAssignment();
+	
 	public enum Type {
 		ARRAY,
 		OBJECT
