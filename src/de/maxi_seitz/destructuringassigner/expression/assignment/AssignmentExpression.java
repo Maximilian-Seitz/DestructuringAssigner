@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
+import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import de.maxi_seitz.destructuringassigner.expression.ExpressionWrapper;
 import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
@@ -70,10 +71,10 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	public abstract void remove();
 	
 	public void groupFollowingAssignments() {
-		AssignmentGroup group = source.getAssignmentGroup();
+		AssignmentGroup group = makeGroup();
 		
 		//The assignment creating a group is always compatible with it, so no check is necessary
-		addToGroup(group);
+		this.addToGroup(group);
 		
 		boolean isCurrentElementInGroup = true;
 		AssignmentExpression currentAssignment = this;
@@ -116,8 +117,14 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		source = SourceExpression.fromAstNode(node);
 	}
 	
+	protected SourceExpression getSourceExpression() {
+		return source;
+	}
+	
 	
 	protected abstract void replaceWithDestructuringAssignment(AstNode destructuringAssignment);
+	
+	protected abstract DeclarationType getDeclarationType();
 	
 	protected abstract AstNode getContainingAstNode();
 	
@@ -134,8 +141,20 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return AssignmentExpression.fromAstNode(nextNode);
 	}
 	
+	private AssignmentGroup makeGroup() {
+		AssignmentGroup group = source.getAssignmentGroup();
+		
+		group.setDeclarationType(getDeclarationType());
+		
+		return group;
+	}
+	
 	private boolean isCompatibleWithGroup(AssignmentGroup group) {
-		return source.isCompatibleWithGroup(group);
+		if(getDeclarationType() == group.getDeclarationType()) {
+			return getSourceExpression().isCompatibleWithGroup(group);
+		}
+		
+		return false;
 	}
 	
 	private void addToGroup(AssignmentGroup group) {

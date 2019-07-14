@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
+import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import org.mozilla.javascript.ast.*;
 
 /**
@@ -19,6 +20,11 @@ class SetterExpression extends AssignmentExpression {
 	@Override
 	public void remove() {
 		getContainingAstNode().removeChild(getGroupAstNode());
+	}
+	
+	@Override
+	protected DeclarationType getDeclarationType() {
+		return DeclarationType.NONE;
 	}
 	
 	@Override

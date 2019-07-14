@@ -1,6 +1,7 @@
 package de.maxi_seitz.destructuringassigner.expression.source;
 
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
+import de.maxi_seitz.destructuringassigner.expression.group.ArrayAssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.group.ObjectAssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
@@ -38,7 +39,14 @@ class PropertySourceExpression extends SourceExpression {
 	
 	@Override
 	public boolean isCompatibleWithGroup(AssignmentGroup group) {
-		return group.getType() == AssignmentGroup.Type.OBJECT;
+		if(group.getType() == AssignmentGroup.Type.OBJECT) {
+			ObjectAssignmentGroup objectAssignmentGroup = (ObjectAssignmentGroup) group;
+			String arrayIdentifier = objectAssignmentGroup.getIdentifier();
+			
+			return getObjectIdentifier().equals(arrayIdentifier);
+		}
+		
+		return false;
 	}
 	
 	@Override

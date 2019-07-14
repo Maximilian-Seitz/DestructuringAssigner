@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
+import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
@@ -31,6 +32,21 @@ class InitializerExpression extends AssignmentExpression {
 		} else {
 			getContainingAstNode().removeChild(declaration);
 		}
+	}
+	
+	@Override
+	protected DeclarationType getDeclarationType() {
+		VariableDeclaration declaration = (VariableDeclaration) getGroupAstNode();
+		
+		if(declaration.isVar()) {
+			return DeclarationType.VAR;
+		} else if(declaration.isConst()) {
+			return DeclarationType.CONST;
+		} else if(declaration.isLet()) {
+			return DeclarationType.LET;
+		}
+		
+		throw new IllegalStateException("Invalid declaration type in line " + declaration.getLineno());
 	}
 	
 	@Override

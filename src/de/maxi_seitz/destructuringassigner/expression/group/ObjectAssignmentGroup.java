@@ -21,6 +21,10 @@ public class ObjectAssignmentGroup extends AssignmentGroup {
 		this.objectIdentifier = objectIdentifier;
 	}
 	
+	public String getIdentifier() {
+		return objectIdentifier;
+	}
+	
 	public void addAssignment(AssignmentExpression assignment) {
 		assignments.add(assignment);
 	}
