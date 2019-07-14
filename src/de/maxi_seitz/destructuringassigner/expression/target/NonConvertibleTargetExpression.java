@@ -5,7 +5,7 @@ import org.mozilla.javascript.ast.AstNode;
 
 class NonConvertibleTargetExpression extends TargetExpression {
 	
-	NonConvertibleTargetExpression(AstNode node) {
+	protected NonConvertibleTargetExpression(AstNode node) {
 		super(node);
 		
 		if(node != null) {

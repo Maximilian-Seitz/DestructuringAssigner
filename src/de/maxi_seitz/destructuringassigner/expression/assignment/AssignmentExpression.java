@@ -45,33 +45,26 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return assignments;
 	}
 	
-	
-	public AstNode getTargetNode() {
-		return target.getNode();
-	}
-	
-	public abstract void setSourceNode(AstNode sourceNode);
-	
-	public abstract void setTargetNode(AstNode targetNode);
-	
 	public boolean isConvertibleExpression() {
 		return source.isConvertibleExpression() &&
 				   target.isConvertibleExpression() &&
 				   source.isTargetValidForDestructoring(target) &&
-				   getContainingAstNode() != null &&
-				   getContainingAstNode().getFirstChild() != null;
+				   getContainingAstNode() != null &&	//is within a "container"
+				   getContainingAstNode().hasChildren();//"container" has list of children (excludes inline expressions, like in first line of a for-loop
 	}
 	
 	public boolean isFirstInList() {
 		List<AssignmentExpression> proceedingAssignments = getProceedingAssignments();
+		int lastProceedingAssignmentId = proceedingAssignments.size() - 1;
 		
-		for(AssignmentExpression proceedingAssignment : proceedingAssignments) {
-			if(proceedingAssignment.isConvertibleExpression()) {
-				return false;
-			}
+		if(lastProceedingAssignmentId >= 0) {
+			AssignmentExpression lastProceedingAssignment = proceedingAssignments.get(lastProceedingAssignmentId);
+			
+			//if directly proceeding assignment is convertible, this isn't the start of the group
+			return !lastProceedingAssignment.isConvertibleExpression();
+		} else {
+			return true;
 		}
-		
-		return true;
 	}
 	
 	public abstract void remove();
@@ -79,7 +72,7 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	public void groupFollowingAssignments() {
 		AssignmentGroup group = source.getAssignmentGroup();
 		
-		//The assignment creating a group is always compatible with it
+		//The assignment creating a group is always compatible with it, so no check is necessary
 		addToGroup(group);
 		
 		boolean isCurrentElementInGroup = true;
@@ -103,15 +96,16 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 			}
 		}
 		
-		group.compressToDestructuringAssignment();
+		if(group.isCompressible()) {
+			AstNode destructuringAssignment = group.compressToDestructuringAssignment();
+			
+			this.replaceWithDestructuringAssignment(destructuringAssignment);
+		}
 	}
 	
-	
-	@Override
-	public String toString() {
-		return getTargetString() + " = " + getSourceString();
+	public AstNode getTargetNode() {
+		return target.getNode();
 	}
-	
 	
 	
 	protected void setTargetExpression(AstNode node) {
@@ -123,23 +117,16 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	}
 	
 	
+	protected abstract void replaceWithDestructuringAssignment(AstNode destructuringAssignment);
+	
 	protected abstract AstNode getContainingAstNode();
 	
 	protected abstract AstNode getGroupAstNode();
 	
 	
-	
 	private List<AssignmentExpression> getProceedingAssignments() {
-		AstNode container = getContainingAstNode();
-		
-		if(container != null) {
-			if(container.getFirstChild() != null) {
-				AstNode previousNode = (AstNode) container.getChildBefore(getGroupAstNode());
-				return AssignmentExpression.fromAstNode(previousNode);
-			}
-		}
-		
-		return null;
+		AstNode previousNode = (AstNode) getContainingAstNode().getChildBefore(getGroupAstNode());
+		return AssignmentExpression.fromAstNode(previousNode);
 	}
 	
 	private List<AssignmentExpression> getFollowingAssignments() {
@@ -147,21 +134,11 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return AssignmentExpression.fromAstNode(nextNode);
 	}
 	
-	
 	private boolean isCompatibleWithGroup(AssignmentGroup group) {
 		return source.isCompatibleWithGroup(group);
 	}
 	
 	private void addToGroup(AssignmentGroup group) {
 		source.addAssignmentToGroup(group, this);
-	}
-	
-	
-	private String getTargetString() {
-		return target.toString();
-	}
-	
-	private String getSourceString() {
-		return source.toString();
 	}
 }

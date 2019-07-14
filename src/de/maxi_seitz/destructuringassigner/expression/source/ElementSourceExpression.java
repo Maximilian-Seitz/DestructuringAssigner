@@ -12,7 +12,7 @@ class ElementSourceExpression extends SourceExpression {
 	
 	private final ElementGet node;
 	
-	ElementSourceExpression(ElementGet node) {
+	protected ElementSourceExpression(ElementGet node) {
 		this.node = node;
 	}
 	

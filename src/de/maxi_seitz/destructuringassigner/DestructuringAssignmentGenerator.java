@@ -2,7 +2,6 @@ package de.maxi_seitz.destructuringassigner;
 
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
 
-import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -28,18 +27,44 @@ public class DestructuringAssignmentGenerator {
 	}
 	
 	public void run() throws IOException {
-		String sourceCode = Files.readString(Paths.get(inputFile));
+		String sourceCode = readSourceCode();
 		
+		AstRoot abstractSyntaxTree = parseSourceCode(sourceCode);
+		
+		if(abstractSyntaxTree != null) {
+			List<AssignmentExpression> firstListElements = getAssignmentsStartingListsInAst(abstractSyntaxTree);
+			
+			for(AssignmentExpression assignment : firstListElements) {
+				assignment.groupFollowingAssignments();
+			}
+			
+			String convertedSourceCode = abstractSyntaxTree.toSource();
+			
+			writeSourceCode(convertedSourceCode);
+		}
+	}
+	
+	
+	private String readSourceCode() throws IOException {
+		return Files.readString(Paths.get(inputFile));
+	}
+	
+	private void writeSourceCode(String sourceCode) throws IOException {
+		Files.writeString(Paths.get(outputFile), sourceCode);
+	}
+	
+	private AstRoot parseSourceCode(String sourceCode) {
 		Parser parser = new Parser();
-		AstRoot abstractSyntaxTree;
 		
 		try {
-			abstractSyntaxTree = parser.parse(sourceCode, inputFile, 0);
+			return parser.parse(sourceCode, inputFile, 0);
 		} catch(EvaluatorException e) {
 			System.err.println("Failed to parse file. Following error found: " + e.getLocalizedMessage());
-			return;
+			return null;
 		}
-		
+	}
+	
+	private List<AssignmentExpression> getAssignmentsStartingListsInAst(AstRoot abstractSyntaxTree) {
 		List<AssignmentExpression> firstListElements = new LinkedList<>();
 		
 		abstractSyntaxTree.visit(astNode -> {
@@ -56,11 +81,8 @@ public class DestructuringAssignmentGenerator {
 			return true;
 		});
 		
-		for(AssignmentExpression assignment : firstListElements) {
-			assignment.groupFollowingAssignments();
-		}
-		
-		Files.writeString(Paths.get(outputFile), abstractSyntaxTree.toSource());
+		return firstListElements;
 	}
+	
 	
 }

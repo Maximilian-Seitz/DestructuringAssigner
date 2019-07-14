@@ -10,7 +10,7 @@ class PropertySourceExpression extends SourceExpression {
 	
 	private final PropertyGet node;
 	
-	PropertySourceExpression(PropertyGet node) {
+	protected PropertySourceExpression(PropertyGet node) {
 		this.node = node;
 	}
 	

@@ -1,5 +1,7 @@
 package de.maxi_seitz.destructuringassigner.expression.group;
 
+import org.mozilla.javascript.ast.AstNode;
+
 public abstract class AssignmentGroup {
 	
 	private Type type;
@@ -12,7 +14,18 @@ public abstract class AssignmentGroup {
 		return type;
 	}
 	
-	public abstract void compressToDestructuringAssignment();
+	public AstNode compressToDestructuringAssignment() {
+		AstNode destructuringTarget = groupDestructoringTargetNode();
+		AstNode destructuringSource = getSourceNode();
+		
+		return generateAssignmentNode(destructuringSource, destructuringTarget);
+	}
+	
+	public abstract boolean isCompressible();
+	
+	protected abstract AstNode generateAssignmentNode(AstNode sourceNode, AstNode targetNode);
+	protected abstract AstNode getSourceNode();
+	protected abstract AstNode groupDestructoringTargetNode();
 	
 	public enum Type {
 		ARRAY,

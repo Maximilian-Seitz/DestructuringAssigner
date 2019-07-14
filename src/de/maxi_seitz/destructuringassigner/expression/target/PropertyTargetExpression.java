@@ -6,7 +6,7 @@ class PropertyTargetExpression extends TargetExpression {
 	
 	private final PropertyGet node;
 	
-	PropertyTargetExpression(PropertyGet node) {
+	protected PropertyTargetExpression(PropertyGet node) {
 		super(node);
 		
 		this.node = node;

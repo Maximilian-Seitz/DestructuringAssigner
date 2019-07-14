@@ -4,16 +4,21 @@ import java.io.IOException;
 
 public class Main {
 	
+	private static final String HELP_STRING = "Usage: destructoringAssignmentGenerator.jar source_path target_path";
+	
 	public static void main(String[] args) {
-		if(args.length != 2) {
+		if(args.length == 2) {
+			convertFile(args[0], args[1]);
+		} else {
 			showHelp();
-			return;
 		}
-		
+	}
+	
+	private static void convertFile(String inputFile, String outputFile) {
 		try {
 			DestructuringAssignmentGenerator generator = new DestructuringAssignmentGenerator();
-			generator.setInputFile(args[0]);
-			generator.setOutputFile(args[1]);
+			generator.setInputFile(inputFile);
+			generator.setOutputFile(outputFile);
 			generator.run();
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -21,7 +26,7 @@ public class Main {
 	}
 	
 	private static void showHelp() {
-		System.out.println("Usage:");
+		System.out.println(HELP_STRING);
 	}
 	
 }

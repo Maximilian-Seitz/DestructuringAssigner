@@ -6,7 +6,7 @@ class ArrayLiteralTargetExpression extends TargetExpression {
 	
 	private final ArrayLiteral node;
 	
-	ArrayLiteralTargetExpression(ArrayLiteral node) {
+	protected ArrayLiteralTargetExpression(ArrayLiteral node) {
 		super(node);
 		
 		this.node = node;

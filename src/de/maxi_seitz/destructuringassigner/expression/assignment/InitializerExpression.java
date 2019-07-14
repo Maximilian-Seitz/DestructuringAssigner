@@ -14,24 +14,10 @@ class InitializerExpression extends AssignmentExpression {
 	
 	private VariableInitializer node;
 	
-	InitializerExpression(VariableInitializer node) {
+	protected InitializerExpression(VariableInitializer node) {
 		this.node = node;
 		setTargetExpression(node.getTarget());
 		setSourceExpression(node.getInitializer());
-	}
-	
-	@Override
-	public void setSourceNode(AstNode sourceNode) {
-		node.setInitializer(sourceNode);
-		
-		setSourceExpression(sourceNode);
-	}
-	
-	@Override
-	public void setTargetNode(AstNode targetNode) {
-		node.setTarget(targetNode);
-		
-		setTargetExpression(targetNode);
 	}
 	
 	@Override
@@ -45,6 +31,19 @@ class InitializerExpression extends AssignmentExpression {
 		} else {
 			getContainingAstNode().removeChild(declaration);
 		}
+	}
+	
+	@Override
+	protected void replaceWithDestructuringAssignment(AstNode destructuringAssignment) {
+		VariableDeclaration declaration = (VariableDeclaration) getGroupAstNode();
+		
+		List<VariableInitializer> initializers = declaration.getVariables();
+		int assignmentNumber = initializers.indexOf(node);
+		
+		VariableInitializer initializer = new VariableInitializer();
+		initializer.setTarget(destructuringAssignment);
+		
+		initializers.set(assignmentNumber, initializer);
 	}
 	
 	@Override

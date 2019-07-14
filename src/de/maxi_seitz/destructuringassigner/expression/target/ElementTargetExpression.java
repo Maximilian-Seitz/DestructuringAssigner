@@ -6,7 +6,7 @@ class ElementTargetExpression extends TargetExpression {
 	
 	private final ElementGet node;
 	
-	ElementTargetExpression(ElementGet node) {
+	protected ElementTargetExpression(ElementGet node) {
 		super(node);
 		
 		this.node = node;

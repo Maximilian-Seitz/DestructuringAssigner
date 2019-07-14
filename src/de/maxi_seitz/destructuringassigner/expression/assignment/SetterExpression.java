@@ -10,29 +10,21 @@ class SetterExpression extends AssignmentExpression {
 	
 	private Assignment node;
 	
-	SetterExpression(Assignment node) {
+	protected SetterExpression(Assignment node) {
 		this.node = node;
 		setTargetExpression(node.getLeft());
 		setSourceExpression(node.getRight());
 	}
 	
 	@Override
-	public void setSourceNode(AstNode sourceNode) {
-		node.setRight(sourceNode);
-		
-		setSourceExpression(sourceNode);
-	}
-	
-	@Override
-	public void setTargetNode(AstNode targetNode) {
-		node.setLeft(targetNode);
-		
-		setTargetExpression(targetNode);
-	}
-	
-	@Override
 	public void remove() {
 		getContainingAstNode().removeChild(getGroupAstNode());
+	}
+	
+	@Override
+	protected void replaceWithDestructuringAssignment(AstNode destructuringAssignment) {
+		ExpressionStatement expressionStatement = (ExpressionStatement) getGroupAstNode();
+		expressionStatement.setExpression(destructuringAssignment);
 	}
 	
 	@Override

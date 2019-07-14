@@ -7,7 +7,7 @@ import org.mozilla.javascript.ast.AstNode;
 
 class NonConvertibleSourceExpression extends SourceExpression {
 	
-	NonConvertibleSourceExpression(AstNode node) {
+	protected NonConvertibleSourceExpression(AstNode node) {
 		if(node != null) {
 			//System.out.println(Token.typeToName(node.getType()) + " node (" + node.getClass().getName() + ") is no convertible source expression.");
 		}
