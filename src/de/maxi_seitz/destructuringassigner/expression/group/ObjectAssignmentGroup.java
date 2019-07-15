@@ -1,5 +1,6 @@
 package de.maxi_seitz.destructuringassigner.expression.group;
 
+import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
 import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
@@ -37,7 +38,12 @@ public class ObjectAssignmentGroup extends AssignmentGroup {
 	@Override
 	protected AstNode generateAssignmentNode(AstNode sourceNode, AstNode targetNode) {
 		Name targetAssignment = new Name();
-		targetAssignment.setIdentifier("(" + targetNode.toSource() + " = " + sourceNode.toSource() + ")");
+		
+		if(getDeclarationType() == DeclarationType.NONE) {
+			targetAssignment.setIdentifier("(" + targetNode.toSource() + " = " + sourceNode.toSource() + ")");
+		} else {
+			targetAssignment.setIdentifier(targetNode.toSource() + " = " + sourceNode.toSource());
+		}
 		
 		return targetAssignment;
 	}
