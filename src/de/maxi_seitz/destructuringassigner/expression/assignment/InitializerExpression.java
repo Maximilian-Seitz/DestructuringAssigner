@@ -77,4 +77,39 @@ class InitializerExpression extends AssignmentExpression {
 	protected AstNode getGroupAstNode() {
 		return node.getParent();
 	}
+	
+	@Override
+	protected AssignmentExpression getProceedingAssignment() {
+		int previousAssignmentNumber = getIndexInGroup() - 1;
+		
+		if(previousAssignmentNumber >= 0) {
+			List<AssignmentExpression> groupAssignments = AssignmentExpression.fromAstNode(getGroupAstNode());
+			return groupAssignments.get(previousAssignmentNumber);
+		} else {
+			return getAssignmentProceedingGroup();
+		}
+	}
+	
+	@Override
+	protected AssignmentExpression getFollowingAssignment() {
+		int nextAssignmentNumber = getIndexInGroup() + 1;
+		
+		if(nextAssignmentNumber < getNumberOfAssignmentsInGroup()) {
+			List<AssignmentExpression> groupAssignments = AssignmentExpression.fromAstNode(getGroupAstNode());
+			return groupAssignments.get(nextAssignmentNumber);
+		} else {
+			return getAssignmentFollowingGroup();
+		}
+	}
+	
+	private int getIndexInGroup() {
+		VariableDeclaration declaration = (VariableDeclaration) getGroupAstNode();
+		
+		List<VariableInitializer> initializers = declaration.getVariables();
+		return initializers.indexOf(node);
+	}
+	
+	private int getNumberOfAssignmentsInGroup() {
+		return ((VariableDeclaration) getGroupAstNode()).getVariables().size();
+	}
 }
