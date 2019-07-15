@@ -1,12 +1,15 @@
 package de.maxi_seitz.destructuringassigner.expression.target;
 
-import org.mozilla.javascript.ast.PropertyGet;
+import org.mozilla.javascript.ast.AstNode;
 
-class PropertyTargetExpression extends TargetExpression {
+/**
+ * Represents data target which can not be represented as a simple name.
+ */
+class UnnamedTargetExpression extends TargetExpression {
 	
-	private final PropertyGet node;
+	private final AstNode node;
 	
-	protected PropertyTargetExpression(PropertyGet node) {
+	protected UnnamedTargetExpression(AstNode node) {
 		super(node);
 		
 		this.node = node;
@@ -22,8 +25,4 @@ class PropertyTargetExpression extends TargetExpression {
 		return null;
 	}
 	
-	@Override
-	public String toString() {
-		return node.toSource();
-	}
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
 	
-	private static final String HELP_STRING = "Usage: destructoringAssignmentGenerator.jar source_path target_path";
+	private static final String HELP_STRING = "Invalid number of parameters.\nParameters: source_path target_path";
 	
 	public static void main(String[] args) {
 		if(args.length == 2) {

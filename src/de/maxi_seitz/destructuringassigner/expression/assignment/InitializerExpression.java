@@ -1,6 +1,7 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
 import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
+
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
@@ -8,8 +9,7 @@ import org.mozilla.javascript.ast.VariableInitializer;
 import java.util.List;
 
 /**
- * Wrapper for {@link VariableInitializer},
- * to allow easier analysis.
+ * Wrapper for assignment as part of a variable initialisation.
  */
 class InitializerExpression extends AssignmentExpression {
 	
@@ -44,9 +44,9 @@ class InitializerExpression extends AssignmentExpression {
 			return DeclarationType.CONST;
 		} else if(declaration.isLet()) {
 			return DeclarationType.LET;
+		} else {
+			throw new IllegalStateException("Invalid declaration type in line " + declaration.getLineno());
 		}
-		
-		throw new IllegalStateException("Invalid declaration type in line " + declaration.getLineno());
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ class InitializerExpression extends AssignmentExpression {
 	
 	@Override
 	protected AssignmentExpression getProceedingAssignment() {
-		int previousAssignmentNumber = getIndexInGroup() - 1;
+		int previousAssignmentNumber = getIndexInDeclaration() - 1;
 		
 		if(previousAssignmentNumber >= 0) {
 			List<AssignmentExpression> groupAssignments = AssignmentExpression.fromAstNode(getGroupAstNode());
@@ -92,9 +92,9 @@ class InitializerExpression extends AssignmentExpression {
 	
 	@Override
 	protected AssignmentExpression getFollowingAssignment() {
-		int nextAssignmentNumber = getIndexInGroup() + 1;
+		int nextAssignmentNumber = getIndexInDeclaration() + 1;
 		
-		if(nextAssignmentNumber < getNumberOfAssignmentsInGroup()) {
+		if(nextAssignmentNumber < getNumberOfAssignmentsInDeclaration()) {
 			List<AssignmentExpression> groupAssignments = AssignmentExpression.fromAstNode(getGroupAstNode());
 			return groupAssignments.get(nextAssignmentNumber);
 		} else {
@@ -102,14 +102,14 @@ class InitializerExpression extends AssignmentExpression {
 		}
 	}
 	
-	private int getIndexInGroup() {
+	private int getIndexInDeclaration() {
 		VariableDeclaration declaration = (VariableDeclaration) getGroupAstNode();
 		
 		List<VariableInitializer> initializers = declaration.getVariables();
 		return initializers.indexOf(node);
 	}
 	
-	private int getNumberOfAssignmentsInGroup() {
+	private int getNumberOfAssignmentsInDeclaration() {
 		return ((VariableDeclaration) getGroupAstNode()).getVariables().size();
 	}
 }

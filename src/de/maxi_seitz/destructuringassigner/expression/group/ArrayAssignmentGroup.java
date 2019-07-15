@@ -1,8 +1,8 @@
 package de.maxi_seitz.destructuringassigner.expression.group;
 
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
+
 import org.mozilla.javascript.ast.ArrayLiteral;
-import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.Name;
 
@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Group of assignments with array as their source.
+ */
 public class ArrayAssignmentGroup extends AssignmentGroup {
 	
 	private final Map<Integer, AssignmentExpression> elementAssignments = new TreeMap<>();
@@ -70,7 +73,7 @@ public class ArrayAssignmentGroup extends AssignmentGroup {
 	}
 	
 	@Override
-	protected AstNode groupDestructoringTargetNode() {
+	protected AstNode groupDestructuringTargetNode() {
 		ArrayLiteral target = new ArrayLiteral();
 		target.setIsDestructuring(true);	//not sure if needed
 		

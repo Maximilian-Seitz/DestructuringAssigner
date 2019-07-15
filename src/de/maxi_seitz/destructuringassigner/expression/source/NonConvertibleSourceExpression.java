@@ -3,15 +3,11 @@ package de.maxi_seitz.destructuringassigner.expression.source;
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
 import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
-import org.mozilla.javascript.ast.AstNode;
 
+/**
+ * Represents data source which is not suitable for destructuring.
+ */
 class NonConvertibleSourceExpression extends SourceExpression {
-	
-	protected NonConvertibleSourceExpression(AstNode node) {
-		if(node != null) {
-			//System.out.println(Token.typeToName(node.getType()) + " node (" + node.getClass().getName() + ") is no convertible source expression.");
-		}
-	}
 	
 	@Override
 	public boolean isConvertibleExpression() {
@@ -19,7 +15,7 @@ class NonConvertibleSourceExpression extends SourceExpression {
 	}
 	
 	@Override
-	public boolean isTargetValidForDestructoring(TargetExpression target) {
+	public boolean isTargetValidForDestructuring(TargetExpression target) {
 		return false;
 	}
 	
@@ -34,8 +30,6 @@ class NonConvertibleSourceExpression extends SourceExpression {
 	}
 	
 	@Override
-	public void addAssignmentToGroup(AssignmentGroup group, AssignmentExpression assignment) {
-	
-	}
+	public void addAssignmentToGroup(AssignmentGroup group, AssignmentExpression assignment) { }
 	
 }

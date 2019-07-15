@@ -2,13 +2,16 @@ package de.maxi_seitz.destructuringassigner.expression.group;
 
 import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
-import org.mozilla.javascript.ast.Assignment;
+
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.Name;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Group of assignments with object as their source.
+ */
 public class ObjectAssignmentGroup extends AssignmentGroup {
 	
 	private List<AssignmentExpression> assignments = new LinkedList<>();
@@ -57,7 +60,7 @@ public class ObjectAssignmentGroup extends AssignmentGroup {
 	}
 	
 	@Override
-	protected AstNode groupDestructoringTargetNode() {
+	protected AstNode groupDestructuringTargetNode() {
 		Name targetNode = new Name();
 		
 		StringBuilder targetBuilder = new StringBuilder();
