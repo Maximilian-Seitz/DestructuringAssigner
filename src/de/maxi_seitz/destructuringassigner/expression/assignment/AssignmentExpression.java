@@ -88,6 +88,8 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 						currentAssignment.groupFollowingAssignments();
 					}
 				}
+			} else {
+				isCurrentElementInGroup = false;
 			}
 		}
 		
