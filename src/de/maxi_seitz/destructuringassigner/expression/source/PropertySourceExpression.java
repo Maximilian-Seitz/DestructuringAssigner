@@ -1,12 +1,17 @@
 package de.maxi_seitz.destructuringassigner.expression.source;
 
 import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpression;
-import de.maxi_seitz.destructuringassigner.expression.group.ArrayAssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.group.ObjectAssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
+
+import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.PropertyGet;
 
+/**
+ * Wrapper for {@link AstNode}, which accesses object property,
+ * and is used as a source for an assignment.
+ */
 class PropertySourceExpression extends SourceExpression {
 	
 	private final PropertyGet node;
@@ -21,7 +26,7 @@ class PropertySourceExpression extends SourceExpression {
 	}
 	
 	@Override
-	public boolean isTargetValidForDestructoring(TargetExpression target) {
+	public boolean isTargetValidForDestructuring(TargetExpression target) {
 		if(target != null) {
 			String targetName = target.getName();
 			String propertyName = node.getProperty().getIdentifier();
@@ -53,11 +58,6 @@ class PropertySourceExpression extends SourceExpression {
 	public void addAssignmentToGroup(AssignmentGroup group, AssignmentExpression assignment) {
 		ObjectAssignmentGroup objectAssignmentGroup = (ObjectAssignmentGroup) group;
 		objectAssignmentGroup.addAssignment(assignment);
-	}
-	
-	@Override
-	public String toString() {
-		return node.toSource();
 	}
 	
 	private String getObjectIdentifier() {

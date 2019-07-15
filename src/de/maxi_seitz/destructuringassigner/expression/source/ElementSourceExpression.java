@@ -4,10 +4,15 @@ import de.maxi_seitz.destructuringassigner.expression.assignment.AssignmentExpre
 import de.maxi_seitz.destructuringassigner.expression.group.ArrayAssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.group.AssignmentGroup;
 import de.maxi_seitz.destructuringassigner.expression.target.TargetExpression;
+
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.NumberLiteral;
 
+/**
+ * Wrapper for {@link AstNode}, which accesses array element,
+ * and is used as a source for an assignment.
+ */
 class ElementSourceExpression extends SourceExpression {
 	
 	private final ElementGet node;
@@ -30,7 +35,7 @@ class ElementSourceExpression extends SourceExpression {
 	}
 	
 	@Override
-	public boolean isTargetValidForDestructoring(TargetExpression target) {
+	public boolean isTargetValidForDestructuring(TargetExpression target) {
 		return true;
 	}
 	
@@ -57,11 +62,6 @@ class ElementSourceExpression extends SourceExpression {
 	public void addAssignmentToGroup(AssignmentGroup group, AssignmentExpression assignment) {
 		ArrayAssignmentGroup arrayAssignmentGroup = (ArrayAssignmentGroup) group;
 		arrayAssignmentGroup.addAssignment(assignment, getArrayElementNumber());
-	}
-	
-	@Override
-	public String toString() {
-		return node.toSource();
 	}
 	
 	private String getArrayIdentifier() {

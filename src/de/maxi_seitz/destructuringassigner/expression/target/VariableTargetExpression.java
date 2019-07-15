@@ -2,6 +2,9 @@ package de.maxi_seitz.destructuringassigner.expression.target;
 
 import org.mozilla.javascript.ast.Name;
 
+/**
+ * Represents data target which can be represented as a simple name.
+ */
 class VariableTargetExpression extends TargetExpression {
 	
 	private final Name node;
@@ -19,11 +22,6 @@ class VariableTargetExpression extends TargetExpression {
 	
 	@Override
 	public String getName() {
-		return node.getString();
-	}
-	
-	@Override
-	public String toString() {
 		return node.getString();
 	}
 	

@@ -1,13 +1,13 @@
 package de.maxi_seitz.destructuringassigner.expression.assignment;
 
 import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
-import org.mozilla.javascript.ast.*;
 
-import java.util.List;
+import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.ExpressionStatement;
+import org.mozilla.javascript.ast.Assignment;
 
 /**
- * Wrapper for {@link Assignment},
- * to allow easier analysis.
+ * Wrapper for assignment outside of a variable initialisation.
  */
 class SetterExpression extends AssignmentExpression {
 	
