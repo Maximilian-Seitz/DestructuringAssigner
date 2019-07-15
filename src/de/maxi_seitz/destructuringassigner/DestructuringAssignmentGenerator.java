@@ -35,7 +35,6 @@ public class DestructuringAssignmentGenerator {
 			List<AssignmentExpression> firstListElements = getAssignmentsStartingListsInAst(abstractSyntaxTree);
 			
 			for(AssignmentExpression assignment : firstListElements) {
-				System.out.println(assignment);
 				assignment.groupFollowingAssignments();
 			}
 			
