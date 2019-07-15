@@ -123,6 +123,45 @@ function funC(obj) {
 	//no change
 }
 
+function fun() {
+	var arr = [1, 2, 3, 4, [5.1, 5.2], [[6.11, 6.12], 6.2], 7, 8];
+	var test = ["a", "b", "c", "d"];
+	var vector = {x: 10, y: 20};
+	var point = {xPos: 5, yPos: 10};
+
+	var unused, l = arr[9];
+	var a = arr[0], j = arr[6];
+	var b = arr[1];
+	var c = arr[2], d = arr[3];
+	var [e, f] = arr[4];
+	var [[g, h], i] = arr[5];
+	var k = arr[7], obj = {a: 0, b: 0, c: 0, d: 0, x:0, y: 0};
+	const x = vector.x;
+	const y = vector.y;
+	obj.a = arr[0];
+	obj.b = arr[2];
+	obj.c = test[3];
+	obj.d = test[4];
+	var xPos = point.xPos;
+	var yPos = point.yPos;
+	xPos = point.xPos;
+	yPos = point.yPos;
+
+	/* expected output
+	var arr = [1, 2, 3, 4, [5.1, 5.2], [[6.11, 6.12], 6.2], 7, 8];
+	var test = ["a", "b", "c", "d"];
+	var vector = {x: 10, y: 20};
+	var point = {xPos: 5, yPos: 10};
+	var unused, [a, b, c, d, [e, f], [[g, h], i], j, k, , l] = arr;
+	var obj = {a: 0, b: 0, c: 0, d: 0, x: 0, y: 0};
+	const {x, y} = vector;
+	[obj.a, , obj.b] = arr;
+	[, , , obj.c, obj.d] = test;
+	var {xPos, yPos} = point;
+	({xPos, yPos} = point);
+	 */
+}
+
 var arr = [1, 2, 3, 4, 5, 6];
 var obj = {};
 
@@ -149,3 +188,5 @@ fun8(arr);
 funA(obj);
 funB(obj);
 funC(obj);
+
+fun();
