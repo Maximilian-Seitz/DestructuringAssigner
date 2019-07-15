@@ -55,14 +55,11 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	}
 	
 	public boolean isFirstInList() {
-		List<AssignmentExpression> proceedingAssignments = getProceedingAssignments();
-		int lastProceedingAssignmentId = proceedingAssignments.size() - 1;
+		AssignmentExpression proceedingAssignment = getProceedingAssignment();
 		
-		if(lastProceedingAssignmentId >= 0) {
-			AssignmentExpression lastProceedingAssignment = proceedingAssignments.get(lastProceedingAssignmentId);
-			
-			//if directly proceeding assignment is convertible, this isn't the start of the group
-			return !lastProceedingAssignment.isConvertibleExpression();
+		if(proceedingAssignment != null) {
+			//if proceeding assignment is convertible, this isn't the start of the group
+			return !proceedingAssignment.isConvertibleExpression();
 		} else {
 			return true;
 		}
@@ -79,20 +76,17 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		boolean isCurrentElementInGroup = true;
 		AssignmentExpression currentAssignment = this;
 		while(isCurrentElementInGroup) {
-			List<AssignmentExpression> nextAssignments = currentAssignment.getFollowingAssignments();
+			currentAssignment = currentAssignment.getFollowingAssignment();
 			
-			for(AssignmentExpression nextAssignment : nextAssignments) {
-				isCurrentElementInGroup = nextAssignment.isCompatibleWithGroup(group);
+			if(currentAssignment != null) {
+				isCurrentElementInGroup = currentAssignment.isCompatibleWithGroup(group);
 				
 				if(isCurrentElementInGroup) {
-					nextAssignment.addToGroup(group);
-					currentAssignment = nextAssignment;
+					currentAssignment.addToGroup(group);
 				} else {
-					if(nextAssignment.isConvertibleExpression()) {
-						nextAssignment.groupFollowingAssignments();
+					if(currentAssignment.isConvertibleExpression()) {
+						currentAssignment.groupFollowingAssignments();
 					}
-					
-					break;
 				}
 			}
 		}
@@ -108,6 +102,11 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return target.getNode();
 	}
 	
+	@Override
+	public String toString() {
+		return target.toString() + " = " + source.toString();
+	}
+	
 	
 	protected void setTargetExpression(AstNode node) {
 		target = TargetExpression.fromAstNode(node);
@@ -121,6 +120,29 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 		return source;
 	}
 	
+	protected AssignmentExpression getAssignmentProceedingGroup() {
+		AstNode previousNode = (AstNode) getContainingAstNode().getChildBefore(getGroupAstNode());
+		List<AssignmentExpression> proceedingAssignments = AssignmentExpression.fromAstNode(previousNode);
+		int lastProceedingAssignmentId = proceedingAssignments.size() - 1;
+		
+		if(lastProceedingAssignmentId >= 0) {
+			return proceedingAssignments.get(lastProceedingAssignmentId);
+		} else {
+			return null;
+		}
+	}
+	
+	protected AssignmentExpression getAssignmentFollowingGroup() {
+		AstNode nextNode = (AstNode) getGroupAstNode().getNext();
+		List<AssignmentExpression> followingAssignments = AssignmentExpression.fromAstNode(nextNode);
+		
+		if(followingAssignments.size() > 0) {
+			return followingAssignments.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	
 	protected abstract void replaceWithDestructuringAssignment(AstNode destructuringAssignment);
 	
@@ -130,16 +152,10 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 	
 	protected abstract AstNode getGroupAstNode();
 	
+	protected abstract AssignmentExpression getProceedingAssignment();
 	
-	private List<AssignmentExpression> getProceedingAssignments() {
-		AstNode previousNode = (AstNode) getContainingAstNode().getChildBefore(getGroupAstNode());
-		return AssignmentExpression.fromAstNode(previousNode);
-	}
+	protected abstract AssignmentExpression getFollowingAssignment();
 	
-	private List<AssignmentExpression> getFollowingAssignments() {
-		AstNode nextNode = (AstNode) getGroupAstNode().getNext();
-		return AssignmentExpression.fromAstNode(nextNode);
-	}
 	
 	private AssignmentGroup makeGroup() {
 		AssignmentGroup group = source.getAssignmentGroup();

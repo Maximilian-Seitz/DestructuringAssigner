@@ -3,6 +3,8 @@ package de.maxi_seitz.destructuringassigner.expression.assignment;
 import de.maxi_seitz.destructuringassigner.expression.DeclarationType;
 import org.mozilla.javascript.ast.*;
 
+import java.util.List;
+
 /**
  * Wrapper for {@link Assignment},
  * to allow easier analysis.
@@ -47,6 +49,16 @@ class SetterExpression extends AssignmentExpression {
 	@Override
 	protected AstNode getGroupAstNode() {
 		return node.getParent();
+	}
+	
+	@Override
+	protected AssignmentExpression getProceedingAssignment() {
+		return getAssignmentProceedingGroup();
+	}
+	
+	@Override
+	protected AssignmentExpression getFollowingAssignment() {
+		return getAssignmentFollowingGroup();
 	}
 	
 }
