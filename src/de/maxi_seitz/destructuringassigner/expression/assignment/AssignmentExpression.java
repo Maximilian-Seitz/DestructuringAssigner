@@ -37,8 +37,6 @@ public abstract class AssignmentExpression extends ExpressionWrapper {
 				
 				if(expression instanceof Assignment) {
 					assignments.add(new SetterExpression((Assignment) expression));
-				} else {
-					System.out.println("Test: " + expression.shortName());
 				}
 			}
 		}
